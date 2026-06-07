@@ -1,0 +1,42 @@
+{
+  "name": "meta-skill",
+  "version": "0.1.0",
+  "description": "An Agent Skill for evaluating, differentiating, and designing better Agent Skills.",
+  "license": "Apache-2.0",
+  "type": "commonjs",
+  "bin": {
+    "meta-skill": "bin/meta-skill.js"
+  },
+  "files": [
+    "SKILL.md",
+    "LICENSE.txt",
+    "README.md",
+    "agents/",
+    "references/",
+    "bin/"
+  ],
+  "scripts": {
+    "pack:check": "npm pack --dry-run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joohw/meta-skill.git"
+  },
+  "bugs": {
+    "url": "https://github.com/joohw/meta-skill/issues"
+  },
+  "homepage": "https://github.com/joohw/meta-skill#readme",
+  "keywords": [
+    "agent-skills",
+    "skill",
+    "ai-agent",
+    "agent",
+    "SKILL.md",
+    "meta-skill",
+    "prompt-engineering",
+    "workflow"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}
