@@ -6,6 +6,7 @@ Use this checklist before delivering a created or updated skill.
 
 - The skill is justified by reusable judgment, fragile workflow knowledge, domain context, scripts, references, or assets.
 - A simpler one-off answer, prompt, README, or local script would not serve the user better.
+- A concise design brief exists mentally or explicitly for substantial work, covering the build decision, alternatives, soul, scope, and validation.
 - Important risks are named and handled: stale docs, credentials, destructive actions, privacy, cost, permissions, or required human approval.
 - The skill has a narrow enough scope to be excellent instead of generically helpful.
 
@@ -20,6 +21,7 @@ Use this checklist before delivering a created or updated skill.
 
 - The skill has a one-sentence identity: who it helps, what job it performs, and what judgment or style makes it different.
 - The frontmatter description, workflow, examples, and resources all reinforce that identity.
+- The skill's closest baseline or competitor is clear enough that the difference is not hand-wavy.
 - Generic advice that could appear unchanged in any other skill has been removed or made specific.
 - The skill feels like a purposeful capability, not a template with a new name.
 
@@ -51,4 +53,5 @@ Use this checklist before delivering a created or updated skill.
 - Run `quick_validate.py` against the final skill folder.
 - Inspect `agents/openai.yaml` if present; `default_prompt` should mention `$skill-name` literally.
 - Check for leftover TODO markers or template prose.
+- The final response can say why the skill is better after the update.
 - If the skill changes a risky or complex workflow, forward-test it with a realistic user request.
