@@ -1,22 +1,25 @@
 ---
 name: meta-skill
-description: Design, create, audit, and refine Codex skills. Use when Codex needs to make a new skill folder, update an existing skill, write SKILL.md instructions, decide what scripts/references/assets belong in a skill, validate skill metadata, or turn a repeated workflow into a reusable Codex capability.
+description: Design, create, audit, and refine Codex skills with careful evaluation, competitive research, and a distinctive skill identity. Use when Codex needs to make a new skill folder, update an existing skill, write SKILL.md instructions, decide what scripts/references/assets belong in a skill, validate skill metadata, compare similar skills or tools, or turn a repeated workflow into a reusable Codex capability with a clear point of view.
 ---
 
 # Meta Skill
 
-Use this skill to turn a repeated workflow, domain practice, or tool integration into a compact Codex skill that another agent can use without extra explanation.
+Use this skill to turn a repeated workflow, domain practice, or tool integration into a compact Codex skill that another agent can use without extra explanation. Treat each skill as a small product: evaluate whether it deserves to exist, study what already solves the problem, then give it a distinct working style and purpose.
 
 ## Workflow
 
-1. Clarify the target behavior with concrete prompts the skill should handle. Ask only for missing details that change the skill's scope, destination, or safety profile.
-2. Choose a lowercase hyphenated skill name under 64 characters. Name the folder exactly after the skill name.
-3. Decide the smallest useful file set:
+1. Evaluate whether a skill is warranted. Prefer creating a skill only when it captures reusable judgment, a repeated workflow, fragile tool knowledge, domain-specific context, or assets/scripts that reduce future work. If the request is better served by a one-off answer, say so and offer the smallest useful alternative.
+2. Clarify the target behavior with concrete prompts the skill should handle. Ask only for missing details that change the skill's scope, destination, or safety profile.
+3. Research nearby solutions before naming or writing. Inspect existing local skills, related plugins, repository conventions, and public or user-provided competitors when available. Identify what they do well, what they omit, and how this skill should differ instead of duplicating them.
+4. Define the skill's soul: one sentence naming its unique promise, judgment style, and user experience. Use this as a design constraint for scope, examples, tone, resources, and validation.
+5. Choose a lowercase hyphenated skill name under 64 characters. Name the folder exactly after the skill name.
+6. Decide the smallest useful file set:
    - `SKILL.md` for trigger metadata and essential workflow instructions.
    - `references/` for longer docs that should be loaded only when relevant.
    - `scripts/` for deterministic or repeated operations that should not be rewritten each time.
    - `assets/` for templates, fonts, icons, examples, or other files used in final outputs.
-4. Initialize the folder with the local skill initializer when available. Prefer:
+7. Initialize the folder with the local skill initializer when available. Prefer:
 
 ```bash
 python3 /Users/huangzhou/.codex/skills/.system/skill-creator/scripts/init_skill.py <skill-name> --path <parent-dir>
@@ -24,19 +27,44 @@ python3 /Users/huangzhou/.codex/skills/.system/skill-creator/scripts/init_skill.
 
 Add `--resources scripts,references,assets` only for resource directories the skill truly needs. Pass `--interface display_name=...`, `--interface short_description=...`, and `--interface default_prompt='Use $skill-name to ...'` when creating UI metadata.
 
-5. Replace all placeholders. Keep frontmatter to only `name` and `description`; put all trigger conditions in `description`, because the body loads only after the skill triggers.
-6. Write the body as instructions for another Codex instance. Use imperative language, compact examples, and explicit references to bundled files only when those files should be read.
-7. Validate the folder before delivery:
+8. Replace all placeholders. Keep frontmatter to only `name` and `description`; put all trigger conditions in `description`, because the body loads only after the skill triggers.
+9. Write the body as instructions for another Codex instance. Use imperative language, compact examples, and explicit references to bundled files only when those files should be read.
+10. Validate the folder before delivery:
 
 ```bash
 python3 /Users/huangzhou/.codex/skills/.system/skill-creator/scripts/quick_validate.py <path-to-skill-folder>
 ```
 
-8. For complex skills, forward-test with realistic prompts and revise based on what the skill failed to make obvious.
+11. For complex skills, forward-test with realistic prompts and revise based on what the skill failed to make obvious.
+
+## Evaluation Principles
+
+- Be conservative about creating new skills. A skill should remove future ambiguity, encode hard-won context, or make a repeated workflow safer and faster.
+- Avoid thin wrappers around common reasoning. If a general instruction is enough, improve the prompt or documentation instead of creating a skill.
+- Name risks early: stale external docs, hidden credentials, destructive actions, expensive calls, privacy boundaries, or workflows that require human approval.
+- Prefer narrow excellence over broad vagueness. A memorable small skill is more useful than a generic one that triggers everywhere.
+
+## Competitive Research
+
+- Search available local skills and plugins first. Compare names, descriptions, resource structure, and trigger boundaries.
+- When external research is appropriate and available, inspect comparable tools, repos, docs, marketplace entries, or examples before finalizing scope.
+- Capture only the useful delta in the skill itself: what this skill does differently, what it intentionally avoids, and what neighboring skill should be used instead.
+- Do not clone a competitor's structure blindly. Borrow proven patterns, then adapt them to the user's actual workflow and Codex's progressive disclosure model.
+
+## Distinctive Soul
+
+Before implementation, write an internal one-sentence identity for the skill:
+
+```text
+This skill helps <user> accomplish <job> by being <distinctive judgment/style>, unlike <nearby alternative> which <limitation or different focus>.
+```
+
+Use the identity to decide what belongs in the skill and what should be excluded. The finished skill does not need to include the sentence verbatim, but its description, workflow, resources, and examples should make the identity legible.
 
 ## Authoring Rules
 
 - Keep `SKILL.md` concise. Move optional detail into one-level reference files and name when to open them.
+- Let the skill's unique promise shape every section; remove content that could belong unchanged in any other skill.
 - Prefer resources only when they reduce future work or prevent fragile recreation.
 - Avoid extra documentation such as `README.md`, install guides, changelogs, or process notes unless the user explicitly asks.
 - Use existing local conventions from nearby skills when updating an existing skill.

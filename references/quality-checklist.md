@@ -2,6 +2,27 @@
 
 Use this checklist before delivering a created or updated skill.
 
+## Strategic Fit
+
+- The skill is justified by reusable judgment, fragile workflow knowledge, domain context, scripts, references, or assets.
+- A simpler one-off answer, prompt, README, or local script would not serve the user better.
+- Important risks are named and handled: stale docs, credentials, destructive actions, privacy, cost, permissions, or required human approval.
+- The skill has a narrow enough scope to be excellent instead of generically helpful.
+
+## Competitive Research
+
+- Existing local skills and relevant plugins have been checked for overlap.
+- Comparable external tools, docs, repos, marketplace entries, or user-provided references have been reviewed when available and useful.
+- The new or updated skill has a clear delta from nearby alternatives.
+- The skill says when to use a neighboring skill or tool instead, if that boundary matters.
+
+## Distinctive Soul
+
+- The skill has a one-sentence identity: who it helps, what job it performs, and what judgment or style makes it different.
+- The frontmatter description, workflow, examples, and resources all reinforce that identity.
+- Generic advice that could appear unchanged in any other skill has been removed or made specific.
+- The skill feels like a purposeful capability, not a template with a new name.
+
 ## Trigger Metadata
 
 - `SKILL.md` frontmatter contains only `name` and `description`.
