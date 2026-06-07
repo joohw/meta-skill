@@ -7,19 +7,19 @@
 Install into any local skills directory:
 
 ```bash
-npx meta-skill install --dest ~/.agent/skills
+npx skill-meta-skill install --dest ~/.agent/skills
 ```
 
 For any tool with a different skills directory, pass that parent directory explicitly:
 
 ```bash
-npx meta-skill install --dest /path/to/agent/skills
+npx skill-meta-skill install --dest /path/to/agent/skills
 ```
 
 You can also set `AGENT_SKILLS_DIR`:
 
 ```bash
-AGENT_SKILLS_DIR=~/.agent/skills npx meta-skill install
+AGENT_SKILLS_DIR=~/.agent/skills npx skill-meta-skill install
 ```
 
 The installer copies only the skill payload: `SKILL.md`, `references/`, `agents/`, and `LICENSE.txt`.

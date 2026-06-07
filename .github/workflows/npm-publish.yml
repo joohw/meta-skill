@@ -1,0 +1,106 @@
+name: Publish npm package
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Optional exact version to publish. Defaults to package.json version."
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Resolve target version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          pkg_version=$(node -p "require('./package.json').version")
+          if [ "${{ github.event_name }}" = "push" ]; then
+            tag="${GITHUB_REF_NAME#v}"
+            if [ "$pkg_version" != "$tag" ]; then
+              echo "package.json version ($pkg_version) does not match tag version ($tag)" >&2
+              exit 1
+            fi
+            target="$tag"
+          elif [ -n "${{ inputs.version }}" ]; then
+            target="${{ inputs.version }}"
+            if [ "$pkg_version" != "$target" ]; then
+              echo "package.json version ($pkg_version) does not match requested version ($target)" >&2
+              exit 1
+            fi
+          else
+            target="$pkg_version"
+          fi
+          name=$(node -p "require('./package.json').name")
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          echo "version=$target" >> "$GITHUB_OUTPUT"
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Audit
+        run: npm audit --audit-level=high
+
+      - name: Pack check
+        run: npm run pack:check --if-present
+
+      - name: Check whether version already exists
+        id: exists
+        shell: bash
+        run: |
+          set +e
+          npm view "${{ steps.version.outputs.name }}@${{ steps.version.outputs.version }}" version --registry=https://registry.npmjs.org >/tmp/npm-view.txt 2>/tmp/npm-view.err
+          status=$?
+          set -e
+          if [ "$status" -eq 0 ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Version already exists on npm; publish will be skipped."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish
+        if: steps.exists.outputs.exists != 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --registry=https://registry.npmjs.org
+
+      - name: Verify published version
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 10); do
+            published=$(npm view "${{ steps.version.outputs.name }}@${{ steps.version.outputs.version }}" version --registry=https://registry.npmjs.org 2>/dev/null || true)
+            if [ "$published" = "${{ steps.version.outputs.version }}" ]; then
+              echo "Verified ${{ steps.version.outputs.name }}@$published"
+              exit 0
+            fi
+            echo "npm registry has not propagated yet; retry $attempt/10"
+            sleep 6
+          done
+          echo "Failed to verify ${{ steps.version.outputs.name }}@${{ steps.version.outputs.version }}" >&2
+          exit 1

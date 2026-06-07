@@ -22,8 +22,8 @@ Options:
   --force  Replace an existing destination folder.
 
 Examples:
-  npx meta-skill install --dest /path/to/agent/skills
-  AGENT_SKILLS_DIR=~/.agent/skills npx meta-skill install
+  npx skill-meta-skill install --dest /path/to/agent/skills
+  AGENT_SKILLS_DIR=~/.agent/skills npx skill-meta-skill install
 `);
 }
 
